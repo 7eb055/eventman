@@ -1,0 +1,121 @@
+.cta-section {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e3a8a 0%, #6366f1 100%);
+  color: #ffffff;
+  padding: 4rem 2rem;
+  margin: 2rem auto;
+  border-radius: 1rem;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.cta-description {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cta-link-wrapper {
+  text-decoration: none;
+}
+
+.cta-button {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #ffffff;
+  color: #1e3a8a;
+}
+
+.cta-button.primary {
+  background-color: #ffffff;
+  color: #1e3a8a;
+}
+
+.cta-button.primary:hover {
+  background-color: #e0e7ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button.secondary {
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+
+.cta-button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cta-decor {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  animation: float 7s ease-in-out infinite;
+}
+
+.cta-decor-1 {
+  width: 180px;
+  height: 180px;
+  top: -40px;
+  left: -40px;
+}
+
+.cta-decor-2 {
+  width: 300px;
+  height: 300px;
+  bottom: -60px;
+  right: -80px;
+  animation-duration: 9s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, 20px); }
+}
+
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 3rem 1.5rem;
+  }
+  .cta-title {
+    font-size: 1.75rem;
+  }
+  .cta-description {
+    font-size: 1rem;
+  }
+}

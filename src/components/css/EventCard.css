@@ -1,0 +1,161 @@
+/* EventCard.css */
+.event-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.card-banner {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.event-card:hover .banner-image {
+  transform: scale(1.05);
+}
+
+.category-tag {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+  background-color: #3498db;
+  z-index: 2;
+}
+
+/* Category-specific colors */
+.category-tag.conference {
+  background-color: #3498db; /* Blue */
+}
+
+.category-tag.trade-show {
+  background-color: #9b59b6; /* Purple */
+}
+
+.category-tag.networking-event {
+  background-color: #2ecc71; /* Green */
+}
+
+.category-tag.retreat {
+  background-color: #e67e22; /* Orange */
+}
+
+.category-tag.festival {
+  background-color: #e74c3c; /* Red */
+}
+
+.category-tag.pop-up-event {
+  background-color: #1abc9c; /* Teal */
+}
+
+.category-tag.seminar {
+  background-color: #f1c40f; /* Yellow */
+}
+
+.category-tag.webinar {
+  background-color: #34495e; /* Dark Blue */
+}
+
+.card-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-meta {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-item i {
+  color: #3498db;
+}
+
+.event-title {
+  margin: 0 0 10px 0;
+  font-size: 1.25rem;
+  color: #2c3e50;
+}
+
+.event-description {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price-tag {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  background: #f8f9fa;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #eaeaea;
+}
+
+.view-details-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #3498db;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.view-details-btn:hover {
+  color: #2980b9;
+}
+
+.view-details-btn i {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.view-details-btn:hover i {
+  transform: translateX(3px);
+}
