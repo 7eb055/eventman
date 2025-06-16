@@ -1,15 +1,17 @@
 import axios from 'axios';
 
 // API base URL - update this if your Laravel server runs on a different port
-const API_URL = 'http://localhost:8000/api';
+const API_URL = "http://localhost:8000";
 
 // Flag to track if we've already shown the server connection error
 let serverErrorShown = false;
 
+// Enable withCredentials by default for all axios requests
+axios.defaults.withCredentials = true;
+
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // Required for cookies/authentication
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -77,7 +79,6 @@ export const getCsrfToken = async () => {
     
     console.log('Getting CSRF token...');
     const response = await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-      withCredentials: true,
       timeout: 3000
     });
     console.log('CSRF token response:', response);

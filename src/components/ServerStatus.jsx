@@ -9,13 +9,15 @@ const ServerStatus = () => {
       // Only check valid API endpoints that should exist on the backend
       const endpoints = [
         // Backend API health check endpoints
+        { url: 'http://localhost:8000/health', name: 'Root Health Check' },
+        { url: 'http://localhost:8000/api/status', name: 'API Status' },
+        { url: 'http://localhost:8000/api/api-health-check', name: 'API Health Check' },
         { url: 'http://localhost:8000/api/debug', name: 'API Debug Endpoint' },
-        { url: 'http://localhost:8000/api-health-check', name: 'API Health Check' },
         { url: 'http://localhost:8000/sanctum/csrf-cookie', name: 'CSRF Token' },
-        
+
         // Don't check the root URL as it might cause unnecessary 404 errors
         // { url: 'http://localhost:8000', name: 'Laravel Root' },
-        
+
         // No need to check frontend URLs in a component that tests backend connectivity
         // { url: 'http://localhost:5173', name: 'React Dev Server' }
       ];
@@ -26,25 +28,28 @@ const ServerStatus = () => {
       for (const endpoint of endpoints) {
         try {
           const startTime = performance.now();
-          
+
           // Using a controller to add a timeout since fetch doesn't natively support it
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 3000);
-          
+
           try {
-            const response = await fetch(endpoint.url, { 
+            const response = await fetch(endpoint.url, {
               method: 'GET',
               cache: 'no-cache',
               headers: {
                 'Accept': 'application/json',
+                'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
               },
-              signal: controller.signal
+              credentials: 'include', // Important for CORS with credentials
+              signal: controller.signal,
+              mode: 'cors' // Explicitly set CORS mode
             });
-            
+
             const endTime = performance.now();
             clearTimeout(timeoutId);
-            
+
             let details = 'Connection successful';
             try {
               // Try to parse response as JSON if possible
@@ -60,14 +65,14 @@ const ServerStatus = () => {
             } catch (e) {
               // Continue if we can't parse the response
             }
-            
+
             results.push({
               endpoint: endpoint.name,
               status: response.ok ? 'Online' : `Error ${response.status}`,
               latency: `${(endTime - startTime).toFixed(0)}ms`,
               details: details
             });
-            
+
             if (!response.ok) {
               allOk = false;
             }
@@ -93,7 +98,7 @@ const ServerStatus = () => {
 
     checkServer();
     const interval = setInterval(checkServer, 30000); // Recheck every 30 seconds
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -103,19 +108,19 @@ const ServerStatus = () => {
       borderRadius: '8px',
       padding: '15px',
       margin: '20px 0',
-      backgroundColor: status === 'Checking...' ? '#f8f9fa' 
-        : status === 'All Systems Online' ? '#e7f5e7' 
+      backgroundColor: status === 'Checking...' ? '#f8f9fa'
+        : status === 'All Systems Online' ? '#e7f5e7'
         : '#ffeaea'
     }}>
-      <h3 style={{ 
-        margin: '0 0 15px 0', 
-        color: status === 'Checking...' ? '#6c757d' 
-          : status === 'All Systems Online' ? '#28a745' 
+      <h3 style={{
+        margin: '0 0 15px 0',
+        color: status === 'Checking...' ? '#6c757d'
+          : status === 'All Systems Online' ? '#28a745'
           : '#dc3545'
       }}>
         Backend Server Status: {status}
       </h3>
-      
+
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -140,11 +145,11 @@ const ServerStatus = () => {
           </tbody>
         </table>
       </div>
-      
-      <div style={{ 
-        marginTop: '15px', 
-        padding: '10px', 
-        backgroundColor: '#f8f9fa', 
+
+      <div style={{
+        marginTop: '15px',
+        padding: '10px',
+        backgroundColor: '#f8f9fa',
         borderRadius: '4px',
         fontSize: '0.9em'
       }}>
@@ -158,7 +163,7 @@ const ServerStatus = () => {
           <li>Check Laravel logs for errors: <code>storage/logs/laravel.log</code></li>
         </ol>
       </div>
-      
+
       {status !== 'All Systems Online' && (
         <div style={{
           marginTop: '10px',

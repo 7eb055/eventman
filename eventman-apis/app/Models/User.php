@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
  * @property int $id
  * @property string $full_name
  * @property string $email
- * @property string $password_hash
+ * @property string $password
  * @property string $role
  * @property bool $is_suspended
  * @property string|null $location
@@ -31,7 +31,7 @@ class User extends Authenticatable
     protected $fillable = [
         'full_name',
         'email',
-        'password_hash', // Changed to match the actual column name in the database
+        'password_hash', // Store hash in password_hash
         'role',
         'location',
         'is_suspended'
@@ -43,7 +43,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password_hash', // Changed to match the actual column name
+        'password_hash', // Hide password_hash
         'remember_token',
     ];
 
@@ -86,18 +86,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the password attribute (Laravel expects 'password', database has 'password_hash')
-     */
-    public function getPasswordAttribute()
-    {
-        return $this->attributes['password_hash'];
-    }
-
-    /**
-     * Set the password attribute (Laravel expects 'password', database has 'password_hash')
+     * Set the password attribute (hash on set, store in password_hash)
      */
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password_hash'] = $value;
+        $this->attributes['password_hash'] = bcrypt($value);
+    }
+
+    /**
+     * Get the password attribute (for Laravel Auth)
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
     }
 }

@@ -37,7 +37,7 @@ class AuthController extends Controller
             $user = new User();
             $user->full_name = $request->name;
             $user->email = $request->email;
-            $user->password_hash = Hash::make($request->password);
+            $user->password = $request->password; // Use mutator for password_hash
             $user->role = $request->role;
             $user->location = $request->role === 'organizer' ? $request->location : null;
             $user->save();
@@ -70,44 +70,32 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        // Debug line - log the login attempt
+        \Log::info('Login attempt', ['email' => $credentials['email']]);
 
-        try {
-            // Find user by email
-            $user = User::where('email', $request->email)->first();
-
-            // Check if user exists and password is correct
-            if (!$user || !Hash::check($request->password, $user->password_hash)) {
-                return response()->json([
-                    'message' => 'Invalid login credentials'
-                ], 401);
-            }
-
-            // Manual authentication
-            Auth::login($user);
+        // This is where the issue might be - Auth::attempt expects a password field
+        // but your database might have password_hash
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
 
             return response()->json([
+                'user' => $user,
                 'message' => 'Login successful',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->full_name,
-                    'email' => $user->email,
-                    'role' => $user->role
-                ]
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Login failed',
-                'error' => $e->getMessage()
-            ], 500);
         }
+
+        // Debug failed attempt
+        \Log::warning('Failed login', ['email' => $credentials['email']]);
+
+        return response()->json([
+            'message' => 'Invalid login credentials',
+        ], 401);
     }
 
     /**
