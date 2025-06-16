@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
             $user = new User();
             $user->full_name = $request->name;
             $user->email = $request->email;
@@ -41,9 +41,9 @@ class AuthController extends Controller
             $user->role = $request->role;
             $user->location = $request->role === 'organizer' ? $request->location : null;
             $user->save();
-            
+
             DB::commit();
-            
+
             return response()->json([
                 'message' => 'User registered successfully',
                 'user' => [
@@ -82,17 +82,17 @@ class AuthController extends Controller
         try {
             // Find user by email
             $user = User::where('email', $request->email)->first();
-            
+
             // Check if user exists and password is correct
             if (!$user || !Hash::check($request->password, $user->password_hash)) {
                 return response()->json([
                     'message' => 'Invalid login credentials'
                 ], 401);
             }
-            
+
             // Manual authentication
             Auth::login($user);
-            
+
             return response()->json([
                 'message' => 'Login successful',
                 'user' => [
@@ -119,7 +119,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
@@ -134,7 +134,7 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $user = $request->user();
-        
+
         return response()->json([
             'id' => $user->id,
             'name' => $user->full_name,

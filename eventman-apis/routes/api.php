@@ -36,7 +36,7 @@ Route::get('/api-health-check', function() {
     } catch (\Exception $e) {
         $dbStatus = 'disconnected: ' . $e->getMessage();
     }
-    
+
     return response()->json([
         'status' => 'healthy',
         'timestamp' => now()->toIso8601String(),
